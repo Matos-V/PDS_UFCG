@@ -1,5 +1,6 @@
 rng('default');
-
+clear all;
+close all;
 %% Global parameters
 Fs = 3200*2;
 Ts = 0:1/Fs:1-1/Fs;
@@ -59,9 +60,26 @@ xlim([-5000 5000])
 xlim([-2*pi 2*pi])
 xticks([-2*pi -1.5*pi -pi -0.5*pi 0.0 0.5*pi pi 1.5*pi 2*pi]);
 xticklabels({'-2\pi','-1.5\pi','-\pi','-0.5\pi','0.0','0.5\pi','\pi','1.5\pi','2\pi'});
+%% Resampling
+%%
+Fn = Fs*1;
+Tn = 0:1/Fn:1-1/Fn;
+
+xn = interp1(Ts,x,Tn,'spline');
+
+figure();
+fplot(xHandle,"LineWidth",1.5,'Color',[0.985 0.727 0.258]); hold on
+stem(Ts,x,"filled");
+xlim([0 0.01]); grid on;
+xticks([0 0.002 0.004 0.006 0.008 0.01])
+xlabel("t [s]", "Interpreter","latex")
+
+stem(Tn,xn,'k');
+legend("Sinal contínuo","Amostrado","Reamostrado","Location","northoutside",...
+    "Orientation","horizontal")
 
 %% Interpolation
-s = interp1(Ts,x,t,'spline');
+s = interp1(Tn,xn,t);
 
 % interp = 0;
 % for i = 1:length(Ts)
@@ -70,7 +88,7 @@ s = interp1(Ts,x,t,'spline');
 
 figure();
 fplot(xHandle,"LineWidth",1.5,'Color',[0.985 0.727 0.258]); hold on
-stem(Ts,x,"filled");
+stem(Tn,xn,"filled");
 xlim([0 0.01]); grid on;
 xticks([0 0.002 0.004 0.006 0.008 0.01])
 xlabel("t [s]", "Interpreter","latex")
