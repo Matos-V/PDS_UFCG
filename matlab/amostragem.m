@@ -61,12 +61,12 @@ xticks([-2*pi -1.5*pi -pi -0.5*pi 0.0 0.5*pi pi 1.5*pi 2*pi]);
 xticklabels({'-2\pi','-1.5\pi','-\pi','-0.5\pi','0.0','0.5\pi','\pi','1.5\pi','2\pi'});
 
 %% Interpolation
-%s = interp1(Ts,x,t,'spline');
+s = interp1(Ts,x,t,'spline');
 
-interp = 0;
-for i = 1:length(Ts)
-    interp = interp + x(i)*sinc((t-(i-1)/Fs)*Fs);
-end
+% interp = 0;
+% for i = 1:length(Ts)
+%     interp = interp + x(i)*sinc((t-(i-1)/Fs)*Fs);
+% end
 
 figure();
 fplot(xHandle,"LineWidth",1.5,'Color',[0.985 0.727 0.258]); hold on
@@ -75,6 +75,6 @@ xlim([0 0.01]); grid on;
 xticks([0 0.002 0.004 0.006 0.008 0.01])
 xlabel("t [s]", "Interpreter","latex")
 
-plot(t,interp,'k');
+plot(t,s,'k');
 legend("Sinal contínuo","Amostrado","Recuperado","Location","northoutside",...
     "Orientation","horizontal")
