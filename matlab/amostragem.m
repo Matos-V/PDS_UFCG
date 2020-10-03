@@ -3,13 +3,16 @@ clear all;
 close all;
 
 %% Global parameters
-Fs = 3200*4;
+Fs = 3200*4+200;
 ns = 0:Fs;
 
-%% Continous ploting
+% Continous ploting
 F = 10*Fs;
 n = 0:F;
 
+% Resample
+M = 2;
+L = 2;
 %% Sampled function  
 xHandle =  @(t) cos(2*pi*3200*t) ...
             + 0.5*cos(2*pi*600*t) ...
@@ -33,23 +36,23 @@ legend("Sinal contínuo","Amostrado","Location","northoutside",...
 y = fft(x);                               
 nFFT = length(x);      
 
-%% double sided FFT
+% double sided FFT
 y0 = fftshift(y);
 
 m = abs(y0); 
 f = (-nFFT/2:nFFT/2-1)*(2*pi/nFFT); 
 
-%% FFT continuous
+% FFT continuous
 yC = fft(xContinuous);                               
 nFFTC = length(xContinuous);      
 
-%% double sided FFT
+% double sided FFT
 y0C = fftshift(yC);
 
 mC = abs(y0C); 
 fC = (-nFFTC/2:nFFTC/2-1)*(2*pi*F/Fs/nFFTC); 
 
-%%
+%
 figure();
 plot(fC,mC,"LineWidth",2), hold on,
 plot(f,m,"LineWidth",2)
@@ -57,9 +60,6 @@ ylabel('Magnitude')
 xlabel('Frequency (Hz)'),
 grid;
 %% Resampling
-%%
-M = 2;
-L = 1;
 Fn = Fs/M*L;
 fn = (-nFFT/2:nFFT/2-1)*(2*pi*Fs/Fn/nFFT); 
 plot(fn,m,"LineWidth",2)
@@ -70,10 +70,9 @@ xlim([-2*pi 2*pi])
 xticks([-2*pi -1.5*pi -pi -0.5*pi 0.0 0.5*pi pi 1.5*pi 2*pi]);
 xticklabels({'-2\pi','-1.5\pi','-\pi','-0.5\pi','0.0','0.5\pi','\pi','1.5\pi','2\pi'});
 
-%%
-
+%% In continuous time
 nn = 0:Fn;
-xn = xHandle(nn/Fn);
+xn = interp1(ns/Fs,x,nn/Fn);
 
 figure();
 fplot(xHandle,"LineWidth",1.5,'Color',[0.985 0.727 0.258]); hold on
@@ -108,3 +107,19 @@ xlabel("t [s]", "Interpreter","latex")
 plot(n/F,interpn,'k');
 legend("Sinal contínuo","Amostrado","Recuperado","Location","northoutside",...
     "Orientation","horizontal")
+
+%%
+Fa = round(16e6/128/13);
+na = 0:Fa;
+xa = xHandle(na/Fa) + max(xContinuous);
+
+nBits = 3;
+levels = linspace(0,5,2^nBits);
+qData = discretize(xa,levels);
+quant = levels(qData) - max(xContinuous);
+
+figure();
+stairs(na/Fa,quant,"LineWidth",1.5,'Color',[0.985 0.727 0.258]);
+xlim([0 0.01]); grid on;
+xticks([0 0.002 0.004 0.006 0.008 0.01])
+xlabel("t [s]", "Interpreter","latex")
