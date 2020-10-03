@@ -3,16 +3,16 @@ clear all;
 close all;
 
 %% Global parameters
-Fs = 3200*4+200;
+Fs = 12000;
 ns = 0:Fs;
 
 % Continous ploting
-F = 10*Fs;
+F = 20*Fs;
 n = 0:F;
 
 % Resample
 M = 2;
-L = 2;
+L = 1;
 %% Sampled function  
 xHandle =  @(t) cos(2*pi*3200*t) ...
             + 0.5*cos(2*pi*600*t) ...
@@ -110,16 +110,23 @@ legend("Sinal contínuo","Amostrado","Recuperado","Location","northoutside",...
 
 %%
 Fa = round(16e6/128/13);
+% Fa = 3200*4;
 na = 0:Fa;
-xa = xHandle(na/Fa) + max(xContinuous);
+xa = xHandle(na/Fa) + 2.5;
 
-nBits = 3;
+nBits = 10;
 levels = linspace(0,5,2^nBits);
 qData = discretize(xa,levels);
-quant = levels(qData) - max(xContinuous);
+quant = levels(qData) - 2.5;
 
 figure();
-stairs(na/Fa,quant,"LineWidth",1.5,'Color',[0.985 0.727 0.258]);
-xlim([0 0.01]); grid on;
-xticks([0 0.002 0.004 0.006 0.008 0.01])
+fplot(xHandle,"LineWidth",1.5,'Color',[0.985 0.727 0.258])
+hold on
+stem(na/Fa,xa-2.5,"filled");
+stairs(na/Fa,quant,'k',"LineWidth",1);
+xlim([0 0.006]); grid on;
+xticks([0 0.002 0.004 0.006])
 xlabel("t [s]", "Interpreter","latex")
+ylabel("x(t)", "Interpreter","latex")
+legend("Sinal contínuo","Amostrado","Quantizado","Location","northoutside",...
+    "Orientation","horizontal")
