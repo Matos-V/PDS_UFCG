@@ -14,7 +14,7 @@ t = sp.symbols('t')
 f = sp.cos(2*np.pi*3200*t) + 0.5*sp.cos(2*np.pi*600*t) + 0.01*sp.cos(2*np.pi*300*t)
 x = sp.lambdify(t,f,'numpy')
 #%% Continuous
-L = 1
+L = 4
 M = 1
 Fs = int(6400/L)
 #Fs = int(6400*M)
