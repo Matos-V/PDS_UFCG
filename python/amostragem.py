@@ -14,16 +14,16 @@ t = sp.symbols('t')
 f = sp.cos(2*np.pi*3200*t) + 0.5*sp.cos(2*np.pi*600*t) + 0.01*sp.cos(2*np.pi*300*t)
 x = sp.lambdify(t,f,'numpy')
 #%% Continuous
-L = 4
+L = 10
 M = 1
-Fs = int(6400/L)
+Fs = int(6000/L)
 #Fs = int(6400*M)
 Ts = 1/Fs
 t_sampled = np.linspace(0,1,Fs)
 x_sampled = x(t_sampled)
 
 #%% Sampled
-F = 10*Fs
+F = 10*6400
 T = 1/F
 t_continuous = np.linspace(0,1,F)
 x_continuous = x(t_continuous)
