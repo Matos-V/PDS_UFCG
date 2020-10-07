@@ -14,27 +14,53 @@ t = sp.symbols('t')
 f = sp.cos(2*np.pi*3200*t) + 0.5*sp.cos(2*np.pi*600*t) + 0.01*sp.cos(2*np.pi*300*t)
 x = sp.lambdify(t,f,'numpy')
 #%% Continuous
-F = 1000000
-T = 1/F
-t_continuous = np.linspace(0,1,F)
-x_continuous = x(t_continuous)
-#%% Sampled
 Fs = 2*3200
 Ts = 1/Fs
 t_sampled = np.linspace(0,1,Fs)
 x_sampled = x(t_sampled)
+
+#%% Sampled
+F = 10*Fs
+T = 1/F
+t_continuous = np.linspace(0,1,F)
+x_continuous = x(t_continuous)
 # %% Plotting continuous signal
 fig = plt.figure()
 plt.plot(t_continuous,x_continuous,'-k')
-plt.plot(t_sampled,x_sampled,'r-o')
 plt.xlim([0,0.01])
 plt.xticks([0, 0.002, 0.004, 0.006, 0.008, 0.01])
-plt.legend(['Continuous','Sampled'])
+plt.legend(['x(t)'])
+plt.xlabel('t (s)')
+plt.title('Continuous time function')
+plt.grid(True)
+plt.show()
+fig.savefig('Func_continuos.png')
+
+#%% Plotting sampled signal
+fig = plt.figure()
+plt.stem(t_sampled,x_sampled,'ro')
+plt.xlim([0,0.01])
+plt.xticks([0, 0.002, 0.004, 0.006, 0.008, 0.01])
+plt.legend(['Sampled - Fs = '+str(Fs)+' Hz'])
+plt.xlabel('time (s)')
+plt.title('Sampled time function')
+plt.grid(True)
+plt.show()
+fig.savefig('Func_sampled_Fs_'+str(Fs)+'Hz.png')
+
+#%% Plotting both signals
+fig = plt.figure()
+plt.plot(t_continuous,x_continuous,'-k')
+plt.stem(t_sampled,x_sampled,'ro')
+plt.xlim([0,0.01])
+plt.xticks([0, 0.002, 0.004, 0.006, 0.008, 0.01])
+plt.legend(['Continuous','Sampled - Fs = '+str(Fs)+' Hz'])
 plt.xlabel('time (s)')
 plt.title('Continuous and Sampled time functions')
 plt.grid(True)
 plt.show()
-fig.savefig('Func.png')
+fig.savefig('Functions.png')
+
 # %% FFT continuous
 y_continuous = np.fft.fft(x_continuous)
 y_continuous = np.abs(y_continuous)/np.max(np.abs(y_continuous))
@@ -65,6 +91,7 @@ plt.stem(freq_sampled,y_sampled)
 plt.grid(True)
 plt.xlabel('frequency (Hz)')
 plt.title('Sampled Fourier transformed function')
+plt.legend(['Fs = '+str(Fs)+' Hz'])
 fig.savefig('fft_sampled.png')
 #%%
 fig = plt.figure()
@@ -75,7 +102,7 @@ plt.xlim([-3200-100,3200+100])
 plt.xlabel('frequency (Hz)')
 plt.title('Continuous and Sampled Fourier transformed functions')
 plt.grid(True)
-plt.legend(['sampled','continuous'])
+plt.legend(['Continuous','Sampled - Fs = '+str(Fs)+' Hz'])
 fig.savefig('fft_both.png')
 
 #%% Interpolação
