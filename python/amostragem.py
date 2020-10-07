@@ -15,9 +15,9 @@ f = sp.cos(2*np.pi*3200*t) + 0.5*sp.cos(2*np.pi*600*t) + 0.01*sp.cos(2*np.pi*300
 x = sp.lambdify(t,f,'numpy')
 #%% Continuous
 L = 10
-M = 1
-Fs = int(6000/L)
-#Fs = int(6400*M)
+M = 10
+#Fs = int(6000/L)
+Fs = int(6000*M)
 Ts = 1/Fs
 t_sampled = np.linspace(0,1,Fs)
 x_sampled = x(t_sampled)
