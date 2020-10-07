@@ -1,11 +1,8 @@
 #%%
-from matplotlib.pyplot import legend
 import numpy as np
 import matplotlib.pyplot as plt
 import sympy as sp
 from numpy import pi
-from scipy import signal
-from scipy.fft import fftshift
 plt.rcParams['lines.linewidth'] = 3
 plt.rcParams['font.size'] = 30
 plt.rcParams['figure.figsize'] = [30,14]
