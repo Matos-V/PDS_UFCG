@@ -7,22 +7,18 @@ plt.rcParams['lines.linewidth'] = 3
 plt.rcParams['font.size'] = 20
 plt.rcParams['figure.figsize'] = [16,12]
 #%%
-
 M = 65
 N = M + 1
 
-omega_p = 4
-omega_r = 0
-omega_s = 10
+omega_p = 30
+omega_s = 100
 
 kp = int(np.floor(N*omega_p/omega_s))
-kr = int(np.floor(N*omega_r/omega_s))
 
 A = zeros(N)
-A[:kp] = ones(kp)
+#A[:kp] = ones(kp)
+A[N-kp:] = ones(kp)
 #%%
-#A = np.concatenate([passband,stopband])
-#A = np.concatenate([stopband,passband])
 indice = int((M+1)/2)
 A[indice] = 0
 k = np.arange(1,int(M-1/2)+1)
