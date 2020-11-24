@@ -8,24 +8,24 @@ plt.rcParams['font.size'] = 20
 plt.rcParams['figure.figsize'] = [16,12]
 #%%
 
-M = 64
+M = 65
 N = M + 1
 
-omega_p = 5
-omega_r = 3.5
-omega_s = 30
+omega_p = 4
+omega_r = 0
+omega_s = 10
 
 kp = int(np.floor(N*omega_p/omega_s))
-print(kp)
-print(M//2 - kp + 1)
 kr = int(np.floor(N*omega_r/omega_s))
+
+A = zeros(N)
+A[:kp] = ones(kp)
 #%%
-passband = ones(kp)
-stopband = zeros(M//2 - kp + 1)
-#%%
-A = np.concatenate([passband,stopband])
+#A = np.concatenate([passband,stopband])
 #A = np.concatenate([stopband,passband])
-k = np.arange(1,int(M/2)+1)
+indice = int((M+1)/2)
+A[indice] = 0
+k = np.arange(1,int(M-1/2)+1)
 h = np.zeros(N)
 # %%
 for n in range(N):
@@ -53,5 +53,4 @@ ax2 = ax1.twinx()
 ax2.set_ylabel('fase (rad)',color = 'red')
 ax2.plot(freq, phase, color='red')
 ax2.tick_params(axis='y', labelcolor='red')
-
 # %%
