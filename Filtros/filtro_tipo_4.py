@@ -7,15 +7,16 @@ plt.rcParams['lines.linewidth'] = 3
 plt.rcParams['font.size'] = 20
 plt.rcParams['figure.figsize'] = [16,12]
 #%%
-M = 64
+M = 65
 N = M + 1
 
-omega_p = 10
+omega_p = 11
 omega_s = 100
 
 
 kp = int(np.floor(N*omega_p/omega_s))
 shift = (int(N/2)-kp)//2
+
 A = zeros(N)
 #A[:kp] = ones(kp)
 #A[N-kp:] = ones(kp)
@@ -23,12 +24,12 @@ A[int(N/2)-kp-shift:int(N/2)+kp-shift] = ones(len(A[int(N/2)-kp:int(N/2)+kp]))
 A
 #%%
 A[0] = 0
-k = np.arange(1,int(M/2)+1)
+k = np.arange(1,int((M-1)/2)+1)
 h = np.zeros(N)
 # %%
 for n in range(N):
-    aux = (-1)**(k+1) * A[k] * np.sin((k*np.pi*(1+2*n))/N)
-    h[n] = A[0] + 2*np.sum(aux)
+    aux = (-1)**(k) * A[k] * np.sin((k*np.pi*(1+2*n))/N)
+    h[n] = (-1)**(N/2+n)*A[int(N/2)] + 2*np.sum(aux)
 h = h/N
 # %%
 time = np.arange(N)
